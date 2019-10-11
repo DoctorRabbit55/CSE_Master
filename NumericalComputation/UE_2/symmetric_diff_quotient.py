@@ -50,20 +50,20 @@ for i in range(n):
 values = D_sym(knotes, x_0*np.ones(n))
 
 p = neville_scheme(knotes, values, x_0)
-#print(p)
-#input('Press enter to continue..')
+print(p)
+input('Press enter to continue..')
 
-#plotConvergenceRates(knotes, p, n)
+plotConvergenceRates(knotes, p, n)
 
 
 knotes_2 = np.power(knotes, 2)
 values = D_sym(knotes_2, x_0*np.ones(n))
 p = neville_scheme(knotes_2, values, x_0)
 
-#print(p)
-#input('Press enter to continue..')
+print(p)
+input('Press enter to continue..')
 
-#plotConvergenceRates(knotes, p, n)
+plotConvergenceRates(knotes, p, n)
 
 #-------------------------------------------------------------------
 
