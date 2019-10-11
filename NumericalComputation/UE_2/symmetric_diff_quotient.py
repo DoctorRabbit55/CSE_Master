@@ -23,6 +23,23 @@ def D_sym(h, x_0):
     h = np.asarray(h)
     return (f(x_0 + h) - f(x_0 - h)) / (h*2)
 
+def plotConvergenceRates(knotes, p, n):
+    plt.loglog(knotes[0:n], abs(p[0:n,0]-1), label="column 1")
+    plt.loglog(knotes[0:n-1], abs(p[0:n-1,1]-1), label="column 2")
+    plt.loglog(knotes[0:n-2], abs(p[0:n-2,2]-1), label="column 3")
+    #plt.loglog(knotes[0:n-3], abs(p[0:n-3,3]-1), label="column 4")
+    #plt.loglog(knotes[0:n-4], abs(p[0:n-4,4]-1), label="column 5")
+
+    plt.loglog(knotes[0:n], np.power(knotes, 2), linestyle=":", color='cornflowerblue')
+    plt.loglog(knotes[0:n], np.power(knotes, 3), linestyle=":", color='cornflowerblue')
+    plt.loglog(knotes[0:n], np.power(knotes, 4), linestyle=":", color='cornflowerblue')
+
+    plt.xlabel('min(knotes)')
+    plt.ylabel('absolute error')
+    plt.legend(loc="upper left")
+
+    plt.show()
+
 n = 8
 x_0 = 0
 knotes = []
@@ -33,22 +50,43 @@ for i in range(n):
 values = D_sym(knotes, x_0*np.ones(n))
 
 p = neville_scheme(knotes, values, x_0)
+#print(p)
+#input('Press enter to continue..')
+
+#plotConvergenceRates(knotes, p, n)
+
+
+knotes_2 = np.power(knotes, 2)
+values = D_sym(knotes_2, x_0*np.ones(n))
+p = neville_scheme(knotes_2, values, x_0)
+
+#print(p)
+#input('Press enter to continue..')
+
+#plotConvergenceRates(knotes, p, n)
+
+#-------------------------------------------------------------------
+
+def f(x):
+    x = np.asarray(x)
+    print(x)
+    print(np.power(np.amax([x, 0*x], axis=0), 3.0/2.0))
+    return np.power(np.amax([x, 0*x], axis=0), 3.0/2.0)
+
+values = D_sym(knotes, x_0*np.ones(n))
+
+p = neville_scheme(knotes, values, x_0)
 print(p)
 input('Press enter to continue..')
 
-plt.loglog(knotes[0:n], abs(p[0:n,0]-1), label="column 1")
-plt.loglog(knotes[0:n-1], abs(p[0:n-1,1]-1), label="column 2")
-plt.loglog(knotes[0:n-2], abs(p[0:n-2,2]-1), label="column 3")
-#plt.loglog(knotes[0:n-3], abs(p[0:n-3,3]-1), label="column 4")
-#plt.loglog(knotes[0:n-4], abs(p[0:n-4,4]-1), label="column 5")
-
-plt.loglog(knotes[0:n], np.power(knotes, 2), label="h^2", linestyle=":", color='cornflowerblue')
-plt.loglog(knotes[0:n], np.power(knotes, 3), label="h^3", linestyle=":", color='cornflowerblue')
-plt.loglog(knotes[0:n], np.power(knotes, 4), label="h^4", linestyle=":", color='cornflowerblue')
+plotConvergenceRates(knotes, p, n)
 
 
-plt.xlabel('min(knotes)')
-plt.ylabel('absolute error')
-plt.legend(loc="upper left")
+knotes_2 = np.power(knotes, 2)
+values = D_sym(knotes_2, x_0*np.ones(n))
+p = neville_scheme(knotes_2, values, x_0)
 
-plt.show()
+print(p)
+input('Press enter to continue..')
+
+plotConvergenceRates(knotes, p, n)
