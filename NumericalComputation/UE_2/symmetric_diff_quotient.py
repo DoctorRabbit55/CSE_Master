@@ -27,8 +27,6 @@ def plotConvergenceRates(knotes, p, n, true_value):
     plt.loglog(knotes[0:n], abs(p[0:n,0]-true_value), label="column 1")
     plt.loglog(knotes[0:n-1], abs(p[0:n-1,1]-true_value), label="column 2")
     plt.loglog(knotes[0:n-2], abs(p[0:n-2,2]-true_value), label="column 3")
-    #plt.loglog(knotes[0:n-3], abs(p[0:n-3,3]-true_value), label="column 4")
-    #plt.loglog(knotes[0:n-4], abs(p[0:n-4,4]-true_value), label="column 5")
 
     plt.loglog(knotes[0:n], np.power(knotes, 2), linestyle=":", color='cornflowerblue')
     plt.loglog(knotes[0:n], np.power(knotes, 3), linestyle=":", color='cornflowerblue')
@@ -57,7 +55,6 @@ plotConvergenceRates(knotes, p, n, 1)
 
 
 knotes_2 = np.power(knotes, 2)
-values = D_sym(knotes_2, x_0*np.ones(n))
 p = neville_scheme(knotes_2, values, x_0)
 
 print(p)
@@ -83,7 +80,6 @@ plotConvergenceRates(knotes, p, n, 0)
 
 
 knotes_2 = np.power(knotes, 2)
-values = D_sym(knotes_2, x_0*np.ones(n))
 p = neville_scheme(knotes_2, values, x_0)
 
 print(p)
