@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from matplotlib import pyplot as plt
 
 def S(N):
@@ -14,8 +15,27 @@ A = [[1, 1.0/10, 1.0/100], [1, 1.0/100, 1.0/10000], [1, 1.0/1000, 1.0/1000000]]
 
 a = np.linalg.solve(A, b)
 
-print(S_approx(10^6,a)/S(10^6))
-print(S_approx(10^8,a)/S(10^8))
+time1 = time.time()
+S_ap = S_approx(10**6, a)
+time2 = time.time()
+S_real = S(10**6)
+time3 = time.time()
+
+print("time of approximation:",time2-time1)
+print("time of real sum:",time3-time2)
+print("error of approximation:",S_ap/S_real)
+
+input('Press enter to continue..')
+
+time1 = time.time()
+S_ap = S_approx(10**8, a)
+time2 = time.time()
+S_real = S(10**8)
+time3 = time.time()
+
+print("time of approximation:",time2-time1)
+print("time of real sum:",time3-time2)
+print("error of approximation:",S_ap/S_real)
 
 input('Press enter to continue..')
 
