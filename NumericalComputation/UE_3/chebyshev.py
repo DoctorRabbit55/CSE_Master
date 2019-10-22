@@ -30,10 +30,10 @@ for n in range(1,10):
     values = []
 
     for i in range(n):
-        knotes.append((a+b)/2 + (b-a)/2 * np.cos(np.pi*(2*i+1)/(2*n+2)))
+        knotes.append((a+b)/2 + (b-a)/2 * np.cos(np.pi*(2*i+1)/(2*(n-1)+2)))
 
     values = f(knotes)
-
+    
     p = neville_scheme(knotes, values)
     p = sp.simplify(p[0,n-1])
 
