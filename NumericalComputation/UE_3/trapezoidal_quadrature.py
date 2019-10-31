@@ -48,16 +48,20 @@ for h in h_list:
     values_1 = f1(np.asarray(knotes))
     values_2 = f2(np.asarray(knotes))
     values_3 = f3(np.asarray(knotes))
-    #print(sum(values_2))
+    
     trapez_quad_1 = h * (1.0/2.0*f1(a) + sum(values_1) + 1.0/2.0*f1(b))
     trapez_quad_2 = h * (1.0/2.0*f2(a) + sum(values_2) + 1.0/2.0*f2(b))
     trapez_quad_3 = h * (1.0/2.0*f3(a) + sum(values_3) + 1.0/2.0*f3(b))
-    #print(trapez_quad_2)
+    
     error_1.append(abs(trapez_quad_1 - real_value_i1[0]))
     error_2.append(abs(trapez_quad_2 - real_value_i2[0]))
     error_3.append(abs(trapez_quad_3 - real_value_i3[0]))
 
-plt.loglog(h_list, error_1)
-plt.loglog(h_list, error_2)
-plt.loglog(h_list, error_3)
+plt.loglog(h_list, error_1, label='f1')
+plt.loglog(h_list, error_2, label='f2')
+plt.loglog(h_list, error_3, label='f3')
+plt.loglog(h_list, np.power(h_list, 1), linestyle=":", color='cornflowerblue', label='h^1')
+plt.loglog(h_list, np.power(h_list, 2), linestyle=":", color='cornflowerblue', label='h^2')
+
+plt.legend()
 plt.show()

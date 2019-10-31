@@ -39,7 +39,7 @@ trapez_quad_1 = []
 trapez_quad_2 = []
 trapez_quad_3 = []
 
-I = 10
+I = 5
 
 for i in range(1,I):
     h_list.append(np.exp2(-i))

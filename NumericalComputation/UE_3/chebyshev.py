@@ -45,10 +45,7 @@ for n in range(1,10):
         real_values.append(f(uni_points[i]))
 
     max_error_list.append(np.amax(abs(np.asarray(real_values) - np.array(app_values))))
-
-    #plt.plot(uni_points, app_values)
-    #plt.plot(uni_points, real_values)
-    #plt.show()
+    
 
 plt.semilogy(np.arange(1,10), max_error_list)
 plt.show()
