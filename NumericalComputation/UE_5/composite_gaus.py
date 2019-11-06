@@ -26,11 +26,12 @@ def composite_gauss(n, L, q, f):
         # transform [a,b] to [-1,1]
         x_i_ = (b+a)/2 + x_i*(b-a)/2
 
-        print("transformed points: ",x_i_)
+        #print("transformed points: ",x_i_)
         # evaluate function
-        f_i.append((b-a)/2 * f(x_i_) * alpha_i)
+        f_i.append((b-a)/2 * sum(f(x_i_)*alpha_i))
 
-    y = sum(sum(f_i))
+
+    y = sum(f_i)
     
     return y
 
@@ -49,16 +50,15 @@ print(y - real_y)
 q_list = [0.5, 0.15, 0.05]
 error_list = []
 true_value = -1/1.1**2
-print(true_value)
 
-L = 20
 n_list = np.arange(1,21)
+L_list = n_list
 
 for q in q_list:
 
     temp_list = []
-    for n in n_list:
-        y = composite_gauss(n, L, q, g)    
+    for i in range(len(n_list)):
+        y = composite_gauss(n_list[i], L_list[i], q, g)    
         temp_list.append(abs(y-true_value))
 
     error_list.append(temp_list)
