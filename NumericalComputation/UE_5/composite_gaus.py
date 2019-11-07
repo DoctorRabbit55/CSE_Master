@@ -14,7 +14,7 @@ def composite_gauss(n, L, q, f):
     for i in range(1,L):
         intervals.append((q**(L-i), q**(L-i-1)))
 
-    print("intervals: ", intervals)
+    #print("intervals: ", intervals)
 
     f_i = []
 
@@ -66,5 +66,34 @@ for q in q_list:
 plt.semilogy(n_list, error_list[0], label="q = 0.5")
 plt.semilogy(n_list, error_list[1], label="q = 0.15")
 plt.semilogy(n_list, error_list[2], label="q = 0.05")
+plt.legend()
+plt.show()
+
+error_list = np.asarray(error_list)
+error_list[1] = error_list[1] + 1e-16
+
+error_list_log = []
+error_list_log.append(np.log(error_list[0]))
+error_list_log.append(np.log(error_list[1]))
+error_list_log.append(np.log(error_list[2]))
+
+fit_1 = np.polyfit(n_list, error_list_log[0], 1)
+fit_2 = np.polyfit(n_list, error_list_log[1], 1)
+fit_3 = np.polyfit(n_list, error_list_log[2], 1)
+
+print("q=0.5:",fit_1)
+print("q=0.15:",fit_2)
+print("q=0.05:",fit_3)
+
+fit_1 = np.poly1d(fit_1)
+fit_2 = np.poly1d(fit_2)
+fit_3 = np.poly1d(fit_3)
+
+plt.semilogy(n_list, np.exp(fit_1(n_list)), color='C0')
+plt.semilogy(n_list, np.exp(fit_2(n_list)), color='C1')
+plt.semilogy(n_list, np.exp(fit_3(n_list)), color='C2')
+plt.semilogy(n_list, error_list[0], label="q = 0.5", linestyle=":", color='C0')
+plt.semilogy(n_list, error_list[1], label="q = 0.15", linestyle=":", color='C1')
+plt.semilogy(n_list, error_list[2], label="q = 0.05", linestyle=":", color='C2')
 plt.legend()
 plt.show()
