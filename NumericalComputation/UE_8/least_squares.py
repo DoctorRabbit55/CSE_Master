@@ -17,10 +17,11 @@ for i in range(len(N)):
 
         y[idx] = np.sin(x)
 
-    X = np.dot(linalg.inv(np.dot(A.T,A)), A.T)
+    X = np.dot(A.T,A)
+    b = np.dot(A.T,y)
 
-    b = linalg.solve(X, y)
+    sol = linalg.solve(X, b)
        
-    print(b)
+    print(sol)
 
 
