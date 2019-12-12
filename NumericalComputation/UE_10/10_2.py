@@ -29,6 +29,7 @@ for n in N_list:
         f_curr = f(x0)
         df_curr = df(x0)
         delta = np.linalg.solve(df_curr, f_curr)
+        print(x0)
         x0 = x0 - delta
 
     error_list.append(np.linalg.norm(f(x0)))
