@@ -83,20 +83,24 @@ def compute_accuracy(x, x_gt):
 
 print(error_list_secant)
 
+accuracy_x_newton = []
 accuracy_newton = []
+accuracy_x_secant = []
 accuracy_secant = []
 
 for i in range(len(error_list_newton)):
-    accuracy_newton.append(compute_accuracy(error_list_newton[i], 0) / float((i+1)*3))
-    #accuracy_newton.append(error_list_newton[i] / float((i+1)*3))  
+    #accuracy_newton.append(compute_accuracy(error_list_newton[i], 0) / float((i+1)*3))
+    accuracy_x_newton.append(float((i+1)*3))
+    accuracy_newton.append(error_list_newton[i] / float((i+1)*3))  
 
 
 for i in range(len(error_list_secant)):
-    accuracy_secant.append(compute_accuracy(error_list_secant[i], 0) / float((i+1)*2))
-    #accuracy_secant.append(error_list_secant[i] / float((i+1)*3))  
+    #accuracy_secant.append(compute_accuracy(error_list_secant[i], 0) / float((i+1)*2))
+    accuracy_x_secant.append(float((i+1)*2))
+    accuracy_secant.append(error_list_secant[i] / float((i+1)*3))  
 
-plt.plot(range(len(accuracy_newton)), accuracy_newton, label='newton')
-plt.plot(range(len(accuracy_secant)), accuracy_secant, label='secant')
+plt.semilogy(accuracy_x_newton, accuracy_newton, label='newton')
+plt.semilogy(accuracy_x_secant, accuracy_secant, label='secant')
 plt.xlabel('iteration')
 plt.ylabel('efficiency')
 plt.legend()

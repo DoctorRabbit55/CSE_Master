@@ -1,10 +1,8 @@
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt  
-import sys
-sys.setrecursionlimit(1500)
 
-eps = 1e-4
+eps = 1e-2
 
 def simple_QR(A0, lmax):
 
@@ -17,12 +15,24 @@ def simple_QR(A0, lmax):
         A_list.append(A0)
     return A_list
 
-def calc_shift(A):
-    if A.shape[0] > 1:
-        A = A[:-2, :-2]
+def simple_QR_(A):
 
     n = A.shape[0]-1
+    qr_count = 0
+    
+    while(abs(A[n-1,n]) > eps*(abs(A[n-1,n]) + abs(A[n,n]))):
 
+        #print(A)
+        Q,R = la.qr(A)
+        A = np.dot(R,Q)
+        qr_count += 1
+    return qr_count, list(np.diagonal(A))
+
+def calc_shift(A):
+    if A.shape[0] > 1:
+        A = A[-2:, -2:]
+
+    n = A.shape[0]-1
     eig, v = la.eig(A)
     eig = eig - A[n,n]
 
@@ -31,27 +41,30 @@ def calc_shift(A):
 def fancy_QR(A):
     n = A.shape[0]-1
     qr_count = 0
+    eig_list = []
     
-    while(abs(A[n-1,n]) > eps*(abs(A[n-1,n]) + abs(A[n,n]))):
-        s = calc_shift(A)
-        Q,R = la.qr(A - s*np.eye(n+1))
-        A = np.dot(R,Q)  + s*np.eye(n+1)
-        qr_count += 1
+    while n > 1:
 
-    if n > 2:
-        qr_rec, eig_rec = fancy_QR(A[:-1,:-1])
-        return qr_count+qr_rec, [A[n,n]] + eig_rec
-    else:
-        return qr_count, list(np.diagonal(A))
+        while(abs(A[n-1,n]) > eps*(abs(A[n-1,n]) + abs(A[n,n]))):
+            s = calc_shift(A)
+            Q,R = la.qr(A - s*np.eye(n+1))
+            A = np.dot(R,Q) + s*np.eye(n+1)
+            qr_count += 1
+
+        eig_list.append(A[n,n])
+        A = A[:-1,:-1]
+        n = A.shape[0]-1
+        
+    return qr_count, eig_list + list(np.diagonal(A))
         
 
 A0 = np.array([[1,0,0], [0,2,0], [2,1,3]])
 A0 = la.hessenberg(A0)
 lmax = 3
 
-#print(la.eig(A0))
+print(la.eig(A0))
 #print(np.diagonal(simple_QR(A0, lmax)))
-#print(fancy_QR(A0))
+print(simple_QR_(A0))
 
 def A_triag(n):
     return np.diag(2*np.ones(n)) - np.diag(np.ones(n-1),-1) - np.diag(np.ones(n-1), 1)
@@ -88,14 +101,14 @@ plt.show()
 
 qr_count_list = []
 n_list = []
-for i in range(2,9):
+for i in range(2,11):
     n_list.append(2**i)
 
 for n in n_list:
 
     A = la.hessenberg(A_triag(n))
     qr_count, eig = fancy_QR(A)
-    print(qr_count)
+    print(qr_count, flush=True)
     qr_count_list.append(qr_count)
     
     
