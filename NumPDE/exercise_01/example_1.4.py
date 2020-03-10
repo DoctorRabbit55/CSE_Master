@@ -45,14 +45,10 @@ grad_exact = grad(gfu_exact)
 Draw(gfu_exact)
 Draw(-grad(gfu_exact), mesh, "Flux")
 
-data_list = []
+sum = Integrate(gfu_exact, mesh)
+area = Integrate(1, mesh)
 
-for i in range(len(gfu_exact.vec.data)):
-  data_list.append(gfu_exact.vec.data[i])
-
-data_list.sort()
-print("mean: ", data_list[int(len(data_list)/2)])
-
+print("mean: ", sum/area)
 
 L2_error_list = []
 H1_error_list = []
@@ -87,7 +83,9 @@ for k in range(1,9):
 #Draw(gfu)
 #raw(-grad(gfu), mesh, "Flux")
 
-plt.plot(range(len(L2_error_list)), L2_error_list)
+plt.semilogy(range(len(L2_error_list)), L2_error_list, label='L2')
+plt.semilogy(range(len(H1_error_list)), H1_error_list, label='H1')
+plt.legend()
 plt.show()
 
 
