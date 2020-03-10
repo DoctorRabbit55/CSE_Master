@@ -24,7 +24,7 @@ geo.Append(["line", p6, p1])
 mesh = Mesh(geo.GenerateMesh(maxh=0.1))
 #mesh = Mesh(unit_square.GenerateMesh(maxh=0.2))
 
-fes_exact = H1(mesh, order=10, dirichlet=[0,0,0,0,0,0])
+fes_exact = H1(mesh, order=10, dirichlet=[1,2,3,4,5,6])
 
 u_exact = fes_exact.TrialFunction()
 v_exact = fes_exact.TestFunction()
@@ -59,7 +59,7 @@ H1_error_list = []
 
 for k in range(1,9):
 
-  fes = H1(mesh, order=k, dirichlet=[0,0,0,0,0,0])
+  fes = H1(mesh, order=k, dirichlet=[1,2,3,4,5,6])
 
   u = fes.TrialFunction()
   v = fes.TestFunction()
