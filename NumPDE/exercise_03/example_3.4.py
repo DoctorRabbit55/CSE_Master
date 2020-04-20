@@ -22,12 +22,12 @@ geo.Append(["line", p6, p7], leftdomain=1, rightdomain=2, bc="6")
 geo.Append(["line", p7, p8], leftdomain=1, rightdomain=2, bc="7")
 geo.Append(["line", p8, p5], leftdomain=1, rightdomain=2, bc="8")
 
-geo.SetMaterial (2, "outer")
 geo.SetMaterial (1, "inner")
+geo.SetMaterial (2, "outer")
 
 mesh = Mesh(geo.GenerateMesh(maxh=0.05))
 
-fes = H1(mesh, order=2, dirichlet=[1,2,3,4])
+fes = H1(mesh, order=3, dirichlet=[1,2,3,4])
 
 u = fes.TrialFunction()
 v = fes.TestFunction()
@@ -36,7 +36,7 @@ f_co = CoefficientFunction([1,0])
 f = LinearForm(fes)
 f += f_co*v*dx
 
-lam = CoefficientFunction([10,1])
+lam = CoefficientFunction([1,10])
 a = BilinearForm(fes, symmetric=False)
 a += lam*grad(u)*grad(v)*dx
 
@@ -49,14 +49,13 @@ gfu.vec.data = a.mat.Inverse(fes.FreeDofs()) * f.vec
 Draw(gfu)
 Draw(lam*grad(gfu), mesh, "Flux")
 
-space_flux = HDiv(mesh, order=2)
+space_flux = HDiv(mesh, order=3)
 gf_flux = GridFunction(space_flux)
 
 flux = lam*grad(gfu)
 gf_flux.Set(flux)
 
-# dx
-#help(Integrate)
+
 flux_y = Integrate(gf_flux[1], mesh, definedon=mesh.Boundaries("5|7"), region_wise=True)
 flux_x = Integrate(gf_flux[0], mesh, definedon=mesh.Boundaries("6|8"), region_wise=True)
 
