@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bernhard/CSE/CSE_Master/SimulationOfFabrication/exercise01/src/Grid.cpp
+Grid.h
+/home/bernhard/CSE/CSE_Master/SimulationOfFabrication/exercise01/src/Grid.h
+
+/home/bernhard/CSE/CSE_Master/SimulationOfFabrication/exercise01/src/GridPoint.cpp
+GridPoint.h
+/home/bernhard/CSE/CSE_Master/SimulationOfFabrication/exercise01/src/GridPoint.h
+iostream
+-
+
+include/Grid.h
+iostream
+-
+vector
+-
+geometry.h
+include/geometry.h
+GridPoint.h
+include/GridPoint.h
+
+include/GridPoint.h
+stdint.h
+-
+vector
+-
+geometry.h
+include/geometry.h
+cmath
+-
+algorithm
+-
+
+include/geometry.h
+
