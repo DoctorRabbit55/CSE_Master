@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
   try {
     x_size = stoi(argv[1]);
     y_size = stoi(argv[2]);
-    spacing = stof(argv[3]);
+    spacing = stof(argv[3]); 
   }
   catch (invalid_argument& e){
     
@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  Grid grid = Grid(x_size, y_size, spacing, PERIODIC_BC);
+  Grid grid = Grid(x_size, y_size, spacing, BC::periodic);
 
   if (argc > 4) {
     

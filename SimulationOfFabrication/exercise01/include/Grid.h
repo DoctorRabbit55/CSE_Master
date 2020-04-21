@@ -6,29 +6,22 @@
 #include "geometry.h"
 #include "GridPoint.h"
 
-#define FORWARD_DER           0
-#define BACKWARD_DER          1
-#define CENTRAL_DER           2
-
-#define X_DIR                 0
-#define Y_DIR                 1
-
-#define PERIODIC_BC           1
-#define REFLECTIVE_BC         0
 
 class Grid {
 
   public:
-    Grid(int size_x, int size_y, float spacing, bool BC);    
+    Grid(int size_x, int size_y, float spacing, BC bc);    
     
     void calculateDistancesToRectangle(Rectangle rec);
     void calculateDistancesToSphere(Sphere sphere);
     std::vector<std::vector<double> > getDistances();   
   
-    double getDerivative(int x, int y, bool direction, uint8_t kind);
+    double getDerivative(int x, int y, Direction direction, Derivative typ);
   
   private:  
     std::vector<std::vector<GridPoint> > grid_points_;
     float spacing_ = 0;
-    bool bc_ = 0;
+    unsigned int size_x_;
+    unsigned int size_y_;
+    BC bc_;
 };

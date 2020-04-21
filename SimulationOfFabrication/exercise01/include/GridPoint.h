@@ -8,6 +8,11 @@
 #include <cmath>
 #include <algorithm>
 
+#include <iostream>
+
+enum Direction{x, y};
+enum BC {periodic, reflective};
+enum Derivative {forwards, backwards, central};
 
 class GridPoint {
 
@@ -15,8 +20,8 @@ class GridPoint {
     GridPoint(float x, float y);
     GridPoint(){};
     
-    void calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x, uint32_t grid_size_y, bool bc_periodic);
-    void calculateDistanceToSphere(Sphere sphere, uint32_t grid_size_x, uint32_t grid_size_y, bool bc_periodic);
+    void calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x, uint32_t grid_size_y, float spacing, BC bc);
+    void calculateDistanceToSphere(Sphere sphere, uint32_t grid_size_x, uint32_t grid_size_y, float spacing, BC bc);
     double getDistance();
 
   private:
