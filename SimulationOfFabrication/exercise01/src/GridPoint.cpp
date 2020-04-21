@@ -31,10 +31,10 @@ void GridPoint::calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x
   
   if (bc == BC::periodic) {
   
-    int per_x_min[] = { rec.x_min - grid_size_x*spacing, rec.x_min, rec.x_min + grid_size_x*spacing };
-    int per_x_max[] = { rec.x_max - grid_size_x*spacing, rec.x_max, rec.x_max + grid_size_x*spacing };  
-    int per_y_min[] = { rec.y_min - grid_size_y*spacing, rec.y_min, rec.y_min + grid_size_y*spacing };  
-    int per_y_max[] = { rec.y_max - grid_size_y*spacing, rec.y_max, rec.y_max + grid_size_y*spacing };
+    float per_x_min[] = { rec.x_min - grid_size_x*spacing, rec.x_min, rec.x_min + grid_size_x*spacing };
+    float per_x_max[] = { rec.x_max - grid_size_x*spacing, rec.x_max, rec.x_max + grid_size_x*spacing };  
+    float per_y_min[] = { rec.y_min - grid_size_y*spacing, rec.y_min, rec.y_min + grid_size_y*spacing };  
+    float per_y_max[] = { rec.y_max - grid_size_y*spacing, rec.y_max, rec.y_max + grid_size_y*spacing };
     
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
@@ -65,8 +65,6 @@ void GridPoint::calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x
         }
       }
     }
-    
-    
   }
 }
 
@@ -80,8 +78,8 @@ void GridPoint::calculateDistanceToSphere(Sphere sphere, uint32_t grid_size_x, u
 
   if (bc == BC::periodic) {
   
-    int per_center_x[] = { sphere.center_x - grid_size_x*spacing, sphere.center_x, sphere.center_x + grid_size_x*spacing };
-    int per_center_y[] = { sphere.center_y - grid_size_y*spacing, sphere.center_y, sphere.center_y + grid_size_y*spacing };  
+    float per_center_x[] = { sphere.center_x - grid_size_x*spacing, sphere.center_x, sphere.center_x + grid_size_x*spacing };
+    float per_center_y[] = { sphere.center_y - grid_size_y*spacing, sphere.center_y, sphere.center_y + grid_size_y*spacing };  
 
     
     for (int i = 0; i < 3; i++) {

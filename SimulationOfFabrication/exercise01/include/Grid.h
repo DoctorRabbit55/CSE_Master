@@ -17,6 +17,8 @@ class Grid {
     std::vector<std::vector<double> > getDistances();   
   
     double getDerivative(int x, int y, Direction direction, Derivative typ);
+    Vector2d getNormalVector(int x, int y);
+    double getCurvature(int x, int y);
   
   private:  
     std::vector<std::vector<GridPoint> > grid_points_;
@@ -24,4 +26,8 @@ class Grid {
     unsigned int size_x_;
     unsigned int size_y_;
     BC bc_;
+    
+    int checkXandUpdate(int x);
+    int checkYandUpdate(int y);
+    
 };

@@ -14,6 +14,14 @@ enum Direction{x, y};
 enum BC {periodic, reflective};
 enum Derivative {forwards, backwards, central};
 
+
+struct Vector2d {
+  double x;
+  double y;
+};
+
+
+
 class GridPoint {
 
   public:
