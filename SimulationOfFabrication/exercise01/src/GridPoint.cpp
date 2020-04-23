@@ -13,7 +13,7 @@ void GridPoint::calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x
   double delta_x;
   double delta_y;
   
-  if (x_ > rec.x_min && x_ < rec.x_max && y_ > rec.y_min && y_ < rec.y_max) {
+  if (x_ >= rec.x_min && x_ <= rec.x_max && y_ >= rec.y_min && y_ <= rec.y_max) {
 
     delta_x = std::min( abs(rec.x_min - x_), abs(rec.x_max - x_) );
     delta_y = std::min( abs(rec.y_min - y_), abs(rec.y_max - y_) );
@@ -74,7 +74,7 @@ void GridPoint::calculateDistanceToSphere(Sphere sphere, uint32_t grid_size_x, u
   
   double radius = sqrt( pow(x_ - sphere.center_x, 2) + pow(y_ - sphere.center_y, 2)); 
 
-  distance_ = radius;
+  distance_ = radius - sphere.radius;
 
   if (bc == BC::periodic) {
   
@@ -94,7 +94,7 @@ void GridPoint::calculateDistanceToSphere(Sphere sphere, uint32_t grid_size_x, u
       
         double radius = sqrt( pow(x_ - sphere.center_x, 2) + pow(y_ - sphere.center_y, 2)); 
 
-        distance_ = std::min(distance_, radius);
+        distance_ = std::min(distance_, radius - sphere.radius);
       }
     }
   }

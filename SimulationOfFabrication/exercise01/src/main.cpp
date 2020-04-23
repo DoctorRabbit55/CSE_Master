@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Grid.h"
+#include "Advancer.h"
 
 #include "vtkOutput.hpp"
 
@@ -32,7 +33,7 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  Grid* grid = new Grid(x_size, y_size, spacing, BC::periodic);
+  std::shared_ptr<Grid> grid_ptr(new Grid(x_size, y_size, spacing, BC::periodic));
 
   if (argc > 4) {
     
@@ -41,15 +42,15 @@ int main(int argc, char** argv) {
     if (surface_class.compare("Rectangle") == 0) {
         
       float x_min = stof(argv[++arg_counter]);
-      float x_max = stof(argv[++arg_counter]);
       float y_min = stof(argv[++arg_counter]);
+      float x_max = stof(argv[++arg_counter]);
       float y_max = stof(argv[++arg_counter]);
       
       Rectangle rec;
       rec.x_min = x_min; rec.x_max = x_max; rec.y_min = y_min; rec.y_max = y_max;
           
       cout << "Adding Rectangle surface: calculating distance function" << endl; 
-      grid->calculateDistancesToRectangle(rec);
+      grid_ptr->calculateDistancesToRectangle(rec);
       cout << "Finished" << endl;
         
     }
@@ -62,8 +63,8 @@ int main(int argc, char** argv) {
       Sphere sphere;
       sphere.center_x = center_x; sphere.center_y = center_y; sphere.radius = radius;
           
-      cout << "Adding Rectangle surface: calculating distance function" << endl; 
-      grid->calculateDistancesToSphere(sphere);
+      cout << "Adding Sphere surface: calculating distance function" << endl; 
+      grid_ptr->calculateDistancesToSphere(sphere);
       cout << "Finished" << endl;
     }
     else {
@@ -71,28 +72,39 @@ int main(int argc, char** argv) {
     }
   }
   
-  std::vector<std::vector<double> > distances = grid->getDistances();
-  
-  vtkOutput output("test", spacing, distances);
-  output.write();
 
   if (argc - arg_counter == 3) {
   
     int x = std::stoi(argv[++arg_counter]);
     int y = std::stoi(argv[++arg_counter]);
-  
-    double deriv = grid->getDerivative(x, y, Direction::y, Derivative::central);
-    std::cout << "derivative: " << deriv << std::endl;
     
-    Vector2d vec = grid->getNormalVector(x, y);
+    Vector2d vec = grid_ptr->getNormalVector(x, y);
+    
     std::cout << "normal vector: " << vec.x << " " << vec.y << std::endl;
   
-    double curv = grid->getCurvature(x, y);
+    double curv = grid_ptr->getCurvature(x, y);
     std::cout << "curvature: " << curv << std::endl;
   }
 
 
-  free(grid);
+  std::shared_ptr<Advancer> adv_ptr(new Advancer(grid_ptr));
+  /*
+  for (int i = 0; i < 2; i++) {
+    adv_ptr->advanceByConstant(1.5, 1);
+  }*/
+  
+  Vector2d vec;
+  vec.x = 0.1;
+  vec.y = 0;
+  
+  for (int i = 0; i < 20; i++) {
+    adv_ptr->advanceByVector(vec, 1);
+  }
+  
+  std::vector<std::vector<double> > distances = grid_ptr->getDistances();
+  
+  vtkOutput output("test", spacing, distances);
+  output.write();
 
   return 1;
 

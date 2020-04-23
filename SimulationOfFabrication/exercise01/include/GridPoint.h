@@ -32,7 +32,7 @@ class GridPoint {
     void calculateDistanceToSphere(Sphere sphere, uint32_t grid_size_x, uint32_t grid_size_y, float spacing, BC bc);
     double getDistance();
 
-  private:
+
     float x_ = 0;
     float y_ = 0;
     

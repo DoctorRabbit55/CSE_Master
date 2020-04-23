@@ -4,16 +4,16 @@ Grid::Grid(int size_x, int size_y, float spacing, BC bc){
 
   spacing_ = spacing;
   bc_ = bc;
-  size_x_ = size_x;
-  size_y_ = size_y;
+  size_x_ = (int) size_x/spacing;
+  size_y_ = (int) size_y/spacing;
  
-  grid_points_ = std::vector<std::vector<GridPoint> >(size_x); 
+  grid_points_ = std::vector<std::vector<GridPoint> >(size_x_); 
 
-  for (int i = 0; i < size_x; i++) {
+  for (int i = 0; i < size_x_; i++) {
 
-    grid_points_[i] = std::vector<GridPoint>(size_y);  
+    grid_points_[i] = std::vector<GridPoint>(size_y_);  
     
-    for (int j = 0; j < size_y; j++) {
+    for (int j = 0; j < size_y_; j++) {
       grid_points_[i][j] = GridPoint(i*spacing, j*spacing);
 
     }
@@ -26,6 +26,12 @@ Grid::Grid(int size_x, int size_y, float spacing, BC bc){
 
 void Grid::calculateDistancesToRectangle(Rectangle rec) {
 
+  // convert to grid coordinates
+  rec.x_min = (int) rec.x_min / spacing_;
+  rec.x_max = (int) rec.x_max / spacing_;
+  rec.y_min = (int) rec.y_min / spacing_;
+  rec.y_max = (int) rec.y_max / spacing_;
+
   for (size_t x = 0; x < size_x_; x++) {  
     for (size_t y = 0; y < size_y_; y++) {
       grid_points_[x][y].calculateDistanceToRectangle(rec, size_x_, size_y_, spacing_, bc_);
@@ -34,6 +40,12 @@ void Grid::calculateDistancesToRectangle(Rectangle rec) {
 }
 
 void Grid::calculateDistancesToSphere(Sphere sphere) {
+
+  // convert to grid coordinates
+  sphere.center_x = (int) sphere.center_x / spacing_;
+  sphere.center_y = (int) sphere.center_y / spacing_;
+  sphere.radius /= spacing_;
+
 
   for (size_t x = 0; x < size_x_; x++) {  
     for (size_t y = 0; y < size_y_; y++) {
@@ -73,9 +85,6 @@ double Grid::getCurvature(int x, int y) {
   double D_x = (getNormalVector(x+1, y).x - getNormalVector(x-1, y).x) / (2*spacing_);
   double D_y = (getNormalVector(x, y+1).y - getNormalVector(x, y-1).y) / (2*spacing_);
 
-  std::cout << "D_x: " << D_x << std::endl;
-  std::cout << "D_y: " << D_y << std::endl;
-
   return D_x + D_y;
 
 }
@@ -91,6 +100,9 @@ Vector2d Grid::getNormalVector(int x, int y) {
   vec.x = getDerivative(x, y, Direction::x, Derivative::central);
   vec.y = getDerivative(x, y, Direction::y, Derivative::central); 
 
+  if (vec.x == 0 && vec.y == 0)
+    return vec;
+    
   double normalization = sqrt( vec.x*vec.x + vec.y*vec.y );
 
   vec.x /= normalization;
@@ -168,7 +180,7 @@ int Grid::checkYandUpdate(int y) {
     if (y == -1)
       return size_y_-1;
       
-    if (x == size_y_)
+    if (y == size_y_)
       return 0;
       
   }

@@ -12,6 +12,8 @@ class Grid {
   public:
     Grid(int size_x, int size_y, float spacing, BC bc);    
     
+    std::vector<std::vector<GridPoint> > grid_points_;
+    
     void calculateDistancesToRectangle(Rectangle rec);
     void calculateDistancesToSphere(Sphere sphere);
     std::vector<std::vector<double> > getDistances();   
@@ -20,8 +22,7 @@ class Grid {
     Vector2d getNormalVector(int x, int y);
     double getCurvature(int x, int y);
   
-  private:  
-    std::vector<std::vector<GridPoint> > grid_points_;
+  
     float spacing_ = 0;
     unsigned int size_x_;
     unsigned int size_y_;
