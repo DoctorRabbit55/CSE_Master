@@ -125,20 +125,20 @@ double Grid::getDerivative(int x, int y, Direction direction, Derivative type) {
     case Derivative::forwards:
       
       if (direction == Direction::x)
-        return (grid_points_[checkXandUpdate(x+1)][y].getDistance() - grid_points_[x][y].getDistance()) / spacing_;
+        return (grid_points_[checkXandUpdate(x+1)][checkXandUpdate(y)].getDistance() - grid_points_[checkXandUpdate(x)][checkXandUpdate(y)].getDistance()) / spacing_;
       
       if (direction == Direction::y)
-        return (grid_points_[x][checkYandUpdate(y+1)].getDistance() - grid_points_[x][y].getDistance()) / spacing_;
+        return (grid_points_[checkXandUpdate(x)][checkYandUpdate(y+1)].getDistance() - grid_points_[checkXandUpdate(x)][checkXandUpdate(y)].getDistance()) / spacing_;
       
       break;
 
     case Derivative::backwards:
       
       if (direction == Direction::x)
-        return (grid_points_[x][y].getDistance() - grid_points_[checkXandUpdate(x-1)][y].getDistance()) / spacing_;
+        return (grid_points_[checkXandUpdate(x)][checkXandUpdate(y)].getDistance() - grid_points_[checkXandUpdate(x-1)][checkXandUpdate(y)].getDistance()) / spacing_;
       
       if (direction == Direction::y)
-        return (grid_points_[x][y].getDistance() - grid_points_[x][checkYandUpdate(y-1)].getDistance()) / spacing_;
+        return (grid_points_[checkXandUpdate(x)][checkXandUpdate(y)].getDistance() - grid_points_[checkXandUpdate(x)][checkYandUpdate(y-1)].getDistance()) / spacing_;
       
       break;
   
@@ -155,15 +155,24 @@ int Grid::checkXandUpdate(int x) {
 
   if (bc_ == BC::periodic) {
   
+    if (x == -2)
+      return size_x_-2;
+  
     if (x == -1)
       return size_x_-1;
       
     if (x == size_x_)
       return 0;
       
+    if (x == size_x_+1)
+      return 1;
+      
   }
 
   if (bc_ == BC::reflective) {
+  
+    if (x == -2)
+      return 1;
   
     if (x == -1)
       return 0;
@@ -171,6 +180,9 @@ int Grid::checkXandUpdate(int x) {
     if (x == size_x_)
       return size_x_-1;
       
+    if (x == size_x_+1)
+      return size_x_-2;  
+    
   }
   
   return x;

@@ -93,14 +93,19 @@ int main(int argc, char** argv) {
     adv_ptr->advanceByConstant(0.5, 1);
   }
   */
-  
+  /*
   Vector2d vec;
   vec.x = 1;
   vec.y = 0;
   
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 4; i++) {
     adv_ptr->advanceByVector(vec, true);
+  }*/
+  
+  for (int i = 0; i < 1; i++) {
+    adv_ptr->advanceByCurvature(true);
   }
+  
   
   std::vector<std::vector<double> > distances = grid_ptr->getDistances();
   
