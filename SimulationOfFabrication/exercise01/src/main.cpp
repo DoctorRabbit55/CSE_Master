@@ -90,15 +90,16 @@ int main(int argc, char** argv) {
   std::shared_ptr<Advancer> adv_ptr(new Advancer(grid_ptr));
   /*
   for (int i = 0; i < 2; i++) {
-    adv_ptr->advanceByConstant(1.5, 1);
-  }*/
+    adv_ptr->advanceByConstant(0.5, 1);
+  }
+  */
   
   Vector2d vec;
-  vec.x = 0.1;
+  vec.x = 1;
   vec.y = 0;
   
-  for (int i = 0; i < 20; i++) {
-    adv_ptr->advanceByVector(vec, 1);
+  for (int i = 0; i < 1; i++) {
+    adv_ptr->advanceByVector(vec, true);
   }
   
   std::vector<std::vector<double> > distances = grid_ptr->getDistances();

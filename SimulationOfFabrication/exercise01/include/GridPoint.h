@@ -18,6 +18,10 @@ enum Derivative {forwards, backwards, central};
 struct Vector2d {
   double x;
   double y;
+  
+  Vector2d(){};
+  Vector2d(double x, double y) : x(x), y(y){};
+  
 };
 
 

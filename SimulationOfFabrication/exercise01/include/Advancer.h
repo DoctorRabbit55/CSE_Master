@@ -19,4 +19,13 @@ class Advancer {
 
     double engquistOsherStep(int x, int y, double v);
 
+    const Vector2d n1 = Vector2d(-1, 0);
+    const Vector2d n2 = Vector2d(1, 0);
+    const Vector2d n3 = Vector2d(-1/sqrt(2), 1/sqrt(2));
+    const Vector2d n4 = Vector2d(1/sqrt(2), -1/sqrt(2));
+    const Vector2d n5 = Vector2d(1/sqrt(2), 1/sqrt(2));
+    const Vector2d n6 = Vector2d(-1/sqrt(2), -1/sqrt(2));
+    const Vector2d n7 = Vector2d(0, -1);
+    const Vector2d n8 = Vector2d(0, 1);
+   
 };

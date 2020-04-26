@@ -37,6 +37,9 @@ void Grid::calculateDistancesToRectangle(Rectangle rec) {
       grid_points_[x][y].calculateDistanceToRectangle(rec, size_x_, size_y_, spacing_, bc_);
     }
   }
+  
+  has_rectangle_surface_ = true;
+  rec_ = rec;
 }
 
 void Grid::calculateDistancesToSphere(Sphere sphere) {
