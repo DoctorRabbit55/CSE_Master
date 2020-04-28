@@ -12,13 +12,17 @@ Advancer::Advancer(std::shared_ptr<Grid> grid_ptr) {
 
 }
 
-void Advancer::advanceByConstant(double v, bool do_engquist_osher){
+void Advancer::advanceByConstant(double v, double delta_t, bool do_engquist_osher){
+
+  // get actual distance by multiplying with time step
+  v *= delta_t;
 
   for (int x = 0; x < grid_ptr_->size_x_; x++) {
     for (int y = 0; y < grid_ptr_->size_y_; y++) {
     
-      if (do_engquist_osher)
+      if (do_engquist_osher){
         temp_grid_[x][y].distance_ = grid_ptr_->grid_points_[x][y].distance_ - v * engquistOsherStep(x, y, v);
+      }
       else
         temp_grid_[x][y].distance_ = grid_ptr_->grid_points_[x][y].distance_ - v;
    
@@ -28,7 +32,7 @@ void Advancer::advanceByConstant(double v, bool do_engquist_osher){
   grid_ptr_->grid_points_.swap(temp_grid_);
 }
 
-void Advancer::advanceByVector(Vector2d vec, bool do_engquist_osher) {
+void Advancer::advanceByVector(Vector2d vec, double delta_t, bool do_engquist_osher) {
 
   Vector2d normal_vec;
   double v = 0;
@@ -38,8 +42,10 @@ void Advancer::advanceByVector(Vector2d vec, bool do_engquist_osher) {
       
       normal_vec = grid_ptr_->getNormalVector(x, y);
 
-      v = vec.x * normal_vec.x + vec.y * normal_vec.y; 
-        //std::cout << normal_vec.x << "   " << normal_vec.y <<  "      " << v <<std::endl;    
+      v = vec.x * normal_vec.x + vec.y * normal_vec.y;
+      // get actual distance by multiplying with time step
+      v *= delta_t;
+       
       if (do_engquist_osher)
         temp_grid_[x][y].distance_ = grid_ptr_->grid_points_[x][y].distance_ - v * engquistOsherStep(x, y, v);
       else
@@ -52,16 +58,14 @@ void Advancer::advanceByVector(Vector2d vec, bool do_engquist_osher) {
   
 }
 
-void Advancer::advanceByCurvature(bool do_engquist_osher) {
+void Advancer::advanceByCurvature(double delta_t, bool do_engquist_osher) {
 
   double v;
 
   for (int x = 0; x < grid_ptr_->size_x_; x++) {
     for (int y = 0; y < grid_ptr_->size_y_; y++) {
     
-      v = grid_ptr_->getCurvature(x, y);
-    
-      std::cout << v << std::endl;
+      v = - delta_t * grid_ptr_->getCurvature(x, y);
     
       if (do_engquist_osher)
         temp_grid_[x][y].distance_ = grid_ptr_->grid_points_[x][y].distance_ - v * engquistOsherStep(x, y, v);
@@ -85,7 +89,6 @@ double Advancer::engquistOsherStep(int x, int y, double v) {
   double D_y_b = grid_ptr_->getDerivative(x,y,Direction::y,Derivative::backwards);
   double D_y_f = grid_ptr_->getDerivative(x,y,Direction::y,Derivative::forwards);
     
-  //std::cout << "D_x_b: " << D_x_b << " D_x_f: " << D_x_f << " D_y_b: " << D_y_b << " D_y_f: " << D_y_f << std::endl;
   
   if (v < 0) {
     
@@ -104,8 +107,9 @@ double Advancer::engquistOsherStep(int x, int y, double v) {
   
   }
   
-  //std::cout << result << std::endl;
-  //return result;
+  // I had problems at the middlepoint of the circle:
+  // it would not change using the constant advection scheme.
+  // The next line fixes this problem, but I am not sure, if it harms in any way
   return result > 0 ? result : 1;
 
 }

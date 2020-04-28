@@ -5,6 +5,7 @@ GridPoint::GridPoint(float x, float y) {
 
   x_ = x;
   y_ = y;
+  distance_ = 0;
 
 }
 
@@ -13,6 +14,7 @@ void GridPoint::calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x
   double delta_x;
   double delta_y;
   
+  // point is inside of rectangle
   if (x_ >= rec.x_min && x_ <= rec.x_max && y_ >= rec.y_min && y_ <= rec.y_max) {
 
     delta_x = std::min( abs(rec.x_min - x_), abs(rec.x_max - x_) );
@@ -21,6 +23,7 @@ void GridPoint::calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x
     distance_ = - std::min(delta_x, delta_y);   
   
   }
+  // point is outside of rectangle
   else {
   
     delta_x = (x_ > rec.x_min && x_ < rec.x_max) ? 0 : std::min( abs(rec.x_min - x_), abs(rec.x_max - x_) );    
@@ -31,10 +34,11 @@ void GridPoint::calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x
   
   if (bc == BC::periodic) {
   
-    float per_x_min[] = { rec.x_min - grid_size_x*spacing, rec.x_min, rec.x_min + grid_size_x*spacing };
-    float per_x_max[] = { rec.x_max - grid_size_x*spacing, rec.x_max, rec.x_max + grid_size_x*spacing };  
-    float per_y_min[] = { rec.y_min - grid_size_y*spacing, rec.y_min, rec.y_min + grid_size_y*spacing };  
-    float per_y_max[] = { rec.y_max - grid_size_y*spacing, rec.y_max, rec.y_max + grid_size_y*spacing };
+    // lists of other rectangles, we have to use
+    float per_x_min[] = { rec.x_min - grid_size_x, rec.x_min, rec.x_min + grid_size_x };
+    float per_x_max[] = { rec.x_max - grid_size_x, rec.x_max, rec.x_max + grid_size_x };  
+    float per_y_min[] = { rec.y_min - grid_size_y, rec.y_min, rec.y_min + grid_size_y };  
+    float per_y_max[] = { rec.y_max - grid_size_y, rec.y_max, rec.y_max + grid_size_y };
     
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
@@ -47,6 +51,8 @@ void GridPoint::calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x
         rec.x_max = per_x_max[i];
         rec.y_min = per_y_min[j];
         rec.y_max = per_y_max[j];
+      
+        // do same thing as above
       
         if (x_ > rec.x_min && x_ < rec.x_max && y_ > rec.y_min && y_ < rec.y_max) {
 
@@ -72,14 +78,15 @@ void GridPoint::calculateDistanceToRectangle(Rectangle rec, uint32_t grid_size_x
 
 void GridPoint::calculateDistanceToSphere(Sphere sphere, uint32_t grid_size_x, uint32_t grid_size_y, float spacing, BC bc) {
   
+  
   double radius = sqrt( pow(x_ - sphere.center_x, 2) + pow(y_ - sphere.center_y, 2)); 
 
   distance_ = radius - sphere.radius;
 
   if (bc == BC::periodic) {
   
-    float per_center_x[] = { sphere.center_x - grid_size_x*spacing, sphere.center_x, sphere.center_x + grid_size_x*spacing };
-    float per_center_y[] = { sphere.center_y - grid_size_y*spacing, sphere.center_y, sphere.center_y + grid_size_y*spacing };  
+    float per_center_x[] = { sphere.center_x - grid_size_x + 1, sphere.center_x, sphere.center_x + grid_size_x - 1 };
+    float per_center_y[] = { sphere.center_y - grid_size_y + 1, sphere.center_y, sphere.center_y + grid_size_y - 1 };  
 
     
     for (int i = 0; i < 3; i++) {
@@ -98,6 +105,8 @@ void GridPoint::calculateDistanceToSphere(Sphere sphere, uint32_t grid_size_x, u
       }
     }
   }
+  
+  distance_ = distance_ * spacing;
 }
 
 double GridPoint::getDistance() {

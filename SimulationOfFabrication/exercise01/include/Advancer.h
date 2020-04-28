@@ -10,9 +10,9 @@ class Advancer {
   public:
     Advancer(std::shared_ptr<Grid> grid_ptr);
 
-    void advanceByConstant(double v, bool do_engquist_osher);
-    void advanceByVector(Vector2d vec, bool do_engquist_osher);
-    void advanceByCurvature(bool do_engquist_osher);
+    void advanceByConstant(double v, double delta_t, bool do_engquist_osher);
+    void advanceByVector(Vector2d vec, double delta_t, bool do_engquist_osher);
+    void advanceByCurvature(double delta_t, bool do_engquist_osher);
 
   private:
     std::shared_ptr<Grid> grid_ptr_;

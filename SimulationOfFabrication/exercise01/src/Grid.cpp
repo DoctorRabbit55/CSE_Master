@@ -2,11 +2,13 @@
 
 Grid::Grid(int size_x, int size_y, float spacing, BC bc){
 
+  // setup class variables
   spacing_ = spacing;
   bc_ = bc;
-  size_x_ = (int) size_x/spacing;
-  size_y_ = (int) size_y/spacing;
+  size_x_ = (int) size_x/spacing + 0.5;
+  size_y_ = (int) size_y/spacing + 0.5;
  
+  // setup grid
   grid_points_ = std::vector<std::vector<GridPoint> >(size_x_); 
 
   for (int i = 0; i < size_x_; i++) {
@@ -14,7 +16,7 @@ Grid::Grid(int size_x, int size_y, float spacing, BC bc){
     grid_points_[i] = std::vector<GridPoint>(size_y_);  
     
     for (int j = 0; j < size_y_; j++) {
-      grid_points_[i][j] = GridPoint(i*spacing, j*spacing);
+      grid_points_[i][j] = GridPoint(i, j);
 
     }
   }
@@ -27,8 +29,8 @@ Grid::Grid(int size_x, int size_y, float spacing, BC bc){
 void Grid::calculateDistancesToRectangle(Rectangle rec) {
 
   // convert to grid coordinates
-  rec.x_min = (int) rec.x_min / spacing_;
-  rec.x_max = (int) rec.x_max / spacing_;
+  rec.x_min = rec.x_min / spacing_;
+  rec.x_max = rec.x_max / spacing_;
   rec.y_min = (int) rec.y_min / spacing_;
   rec.y_max = (int) rec.y_max / spacing_;
 
@@ -37,18 +39,14 @@ void Grid::calculateDistancesToRectangle(Rectangle rec) {
       grid_points_[x][y].calculateDistanceToRectangle(rec, size_x_, size_y_, spacing_, bc_);
     }
   }
-  
-  has_rectangle_surface_ = true;
-  rec_ = rec;
 }
 
 void Grid::calculateDistancesToSphere(Sphere sphere) {
 
   // convert to grid coordinates
-  sphere.center_x = (int) sphere.center_x / spacing_;
-  sphere.center_y = (int) sphere.center_y / spacing_;
+  sphere.center_x = sphere.center_x / spacing_;
+  sphere.center_y = sphere.center_y / spacing_;
   sphere.radius /= spacing_;
-
 
   for (size_t x = 0; x < size_x_; x++) {  
     for (size_t y = 0; y < size_y_; y++) {
@@ -103,6 +101,7 @@ Vector2d Grid::getNormalVector(int x, int y) {
   vec.x = getDerivative(x, y, Direction::x, Derivative::central);
   vec.y = getDerivative(x, y, Direction::y, Derivative::central); 
 
+  // if vec has length 0, do not do normalization
   if (vec.x == 0 && vec.y == 0)
     return vec;
     

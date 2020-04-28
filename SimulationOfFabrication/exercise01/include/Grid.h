@@ -24,8 +24,6 @@ class Grid {
   
   
     float spacing_ = 0;
-    bool has_rectangle_surface_ = 0;
-    Rectangle rec_;
     unsigned int size_x_;
     unsigned int size_y_;
     BC bc_;

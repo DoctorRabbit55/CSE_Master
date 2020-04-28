@@ -1,0 +1,20 @@
+# Getting Started
+
+Initialize the cmake project using
+'''
+cmake .
+'''
+Afterwards you can simple compile the project using make. The binaries are located in /bin.
+
+# Usage
+
+Calculating surface vector and curvature at certain point:
+'''
+./bin/grid x-size y-size spacing [Sphere | Rectangle] [parameters] x y
+'''
+Note: boundary conditions must be also specified after invoking the program.
+
+Advance surface:
+'''
+./bin/advancer x-size y-size spacing [Sphere | Rectangle] [parameters]
+'''
